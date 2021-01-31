@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option csharp_namespace = "Testing2.Services";
+
+import "google/protobuf/timestamp.proto";
+
+service TelemetryCreationService{
+	rpc AddTelemetry (TelemetryRequest) returns (TelemetryResponse);
+	rpc CreateToken (TokenRequest) returns (TokenResponse);
+}
+
+message TokenRequest{
+	string username = 1;
+	string password = 2;
+}
+
+message TokenResponse{
+	string token = 1;
+	google.protobuf.Timestamp expiration = 2;
+	bool success = 3;
+}
+
+message TelemetryRequest{
+	string TelemetryNumber = 1;
+	google.protobuf.Timestamp timeOfRequest = 2;
+	google.protobuf.Timestamp webRequestSent = 3;
+	google.protobuf.Timestamp webRequestRecieved = 4;
+	google.protobuf.Timestamp StoreRequestStarted = 5;
+	google.protobuf.Timestamp StoreRequestFinished = 6;
+	bool successful = 7;
+}
+
+message TelemetryResponse{
+	bool Success = 1;
+}

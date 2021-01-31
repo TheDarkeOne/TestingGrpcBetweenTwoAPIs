@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option csharp_namespace = "Testing2.Services";
+
+
+enum TelemetryStatus{
+	INVALID = 0;
+	SUCCESS = 1;
+	Failure = 2;
+}
