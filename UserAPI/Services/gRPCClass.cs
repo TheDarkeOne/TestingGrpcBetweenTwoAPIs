@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Net.Client;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,14 +12,16 @@ namespace Testing.Services
 {
     public class gRPCClass
     {
-        public gRPCClass()
-        {
+        private readonly IConfiguration config;
 
+        public gRPCClass(IConfiguration config)
+        {
+            this.config = config ?? throw new ArgumentNullException(nameof(config));
         }
 
         public async Task CallServer(Telemetry telemetry) 
         {
-            using var channel = GrpcChannel.ForAddress("https://localhost:5001");
+            using var channel = GrpcChannel.ForAddress(config["ServerUrl"]);
             var Client = new TelemetryCreation.TelemetryCreationClient(channel);
 
             var pkt = new TelemetryRequest()

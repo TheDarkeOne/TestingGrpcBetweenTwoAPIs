@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option csharp_namespace = "UserAPI.Protos";
+
+import "google/protobuf/timestamp.proto";
+
+service UserCreation{
+	rpc CreateUser (UserRequest) returns (UserResponse);
+}
+
+message UserRequest{
+	string Username = 1;
+    string Password = 2;
+	string FirstName = 3;
+    string LastName = 4;
+    string Address = 5;
+	google.protobuf.Timestamp webRequestSent = 6;
+	string requestNumber = 7;
+	bool successful = 8;
+}
+
+message UserResponse{
+	bool Success = 1;
+}
