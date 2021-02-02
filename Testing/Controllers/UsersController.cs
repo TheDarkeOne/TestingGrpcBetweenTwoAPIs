@@ -18,12 +18,14 @@ namespace Testing.Controllers
     {
         private readonly ILogger<UsersController> _logger;
         private readonly IDataService dataService;
+        private readonly gRPCClass gRPC;
 
 
-        public UsersController(ILogger<UsersController> logger, IDataService dataService)
+        public UsersController(ILogger<UsersController> logger, IDataService dataService, gRPCClass gRPC)
         {
             _logger = logger;
             this.dataService = dataService ?? throw new ArgumentNullException(nameof(dataService));
+            this.gRPC = gRPC;
         }
 
         [HttpGet]
@@ -38,32 +40,24 @@ namespace Testing.Controllers
             var newTelemetry = new Telemetry();
 
             newTelemetry.TelemetryNumber = "2";
-            newTelemetry.webRequestSent = DateTime.MinValue;
-            newTelemetry.webRequestRecieved = DateTime.Now;
+            newTelemetry.timeOfRequest = DateTime.UtcNow;
+            newTelemetry.webRequestSent = DateTime.UtcNow;
+            newTelemetry.webRequestRecieved = DateTime.UtcNow;
             
             var newUser = new Users()
             {
-                FirstName = "John",
+                FirstName = "Jane",
                 LastName = "Doe",
                 Username = "johndoe",
                 Password = "johndoe1234",
                 Address = "1234 fake street N 1543 imposter lane E"
             };
 
-            newTelemetry.StoreRequestStarted = DateTime.Now;
+            newTelemetry.StoreRequestStarted = DateTime.UtcNow;
             await dataService.CreateUsers(newUser);
-            newTelemetry.StoreRequestFinished = DateTime.Now;
+            newTelemetry.StoreRequestFinished = DateTime.UtcNow;
 
-            var json = JsonConvert.SerializeObject(newTelemetry);
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var url = "http://localhost:5000/Telemetry/AddTelemetry";
-            using var client = new HttpClient();
-
-            var response = await client.PostAsync(url, data);
-
-            string result = response.Content.ReadAsStringAsync().Result;
-            Console.WriteLine("Result is:" + result);
+            await gRPC.CallServer(newTelemetry);
         }
 
         [HttpPost]

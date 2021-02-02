@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Testing2.Services
 {
-    public class TelemetryService : TelemetryCreationService.TelemetryCreationServiceBase
+    public class TelemetryService : TelemetryCreation.TelemetryCreationBase
     {
         private readonly IDataService dataService;
 
@@ -19,7 +19,7 @@ namespace Testing2.Services
         {
             var result = new TelemetryResponse()
             {
-                Success = false
+                Success = true
             };
          
             if (request.Successful == true) 
@@ -31,7 +31,8 @@ namespace Testing2.Services
                     webRequestSent = request.WebRequestSent.ToDateTime(),
                     webRequestRecieved = request.WebRequestRecieved.ToDateTime(),
                     StoreRequestStarted = request.StoreRequestStarted.ToDateTime(),
-                    StoreRequestFinished = request.StoreRequestFinished.ToDateTime()
+                    StoreRequestFinished = request.StoreRequestFinished.ToDateTime(),
+                    successful = request.Successful
                 };
 
                 await dataService.CreateTelemetry(newTelemetry);

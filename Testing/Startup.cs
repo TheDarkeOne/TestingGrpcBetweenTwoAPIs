@@ -30,7 +30,7 @@ namespace Testing
             services.AddControllers(); 
             services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(convertUrlConnectionString(Configuration["DATABASE_URL"])));
             services.AddTransient<IDataService, EFCoreService>();
-            //services.AddHostedService<Worker>();
+            services.AddTransient<gRPCClass>();
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(

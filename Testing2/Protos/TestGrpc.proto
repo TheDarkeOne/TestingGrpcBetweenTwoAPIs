@@ -4,7 +4,7 @@ option csharp_namespace = "Testing2.Services";
 
 import "google/protobuf/timestamp.proto";
 
-service TelemetryCreationService{
+service TelemetryCreation{
 	rpc AddTelemetry (TelemetryRequest) returns (TelemetryResponse);
 	rpc CreateToken (TokenRequest) returns (TokenResponse);
 }
